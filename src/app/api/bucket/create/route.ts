@@ -1,4 +1,4 @@
-import { makePostRequest, makePutRequest } from "@/utils/makeRequest";
+import { makePostRequest, makePutRequest } from "@/lib/makeRequest";
 
 export async function POST(request: Request) {
     const url = new URL(request.url);

@@ -1,4 +1,4 @@
-import { makeRequest } from "@/utils/makeRequest";
+import { makeRequest } from "@/lib/makeRequest";
 
 
 export async function GET() {

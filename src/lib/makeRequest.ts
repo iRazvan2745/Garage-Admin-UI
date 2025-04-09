@@ -63,6 +63,7 @@ async function makePutRequest(route: string, options: RequestInit = {}) {
 async function makeDeleteRequest(route: string, options: RequestInit = {}) {
   const headers = {
     'Authorization': `Bearer ${process.env.GARAGE_API_KEY}`,
+    'Content-Type': 'application/json',
     ...(options.headers || {})
   };
   
