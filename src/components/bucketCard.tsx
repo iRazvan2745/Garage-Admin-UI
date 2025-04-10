@@ -14,7 +14,7 @@ interface BucketCardProps {
 
 export function BucketCard({ name, id, size, info }: BucketCardProps) {
   return (
-    <Link href={`/buckets/manage/${id}`}>
+    <Link href={`/buckets/${id}`}>
       <Card className="w-[132vh] md:w-[120vh] lg:w-[132vh] bg-background border-border rounded-2xl hover:border-primary/15 transition-colors">
         <CardContent className="p-4 flex items-center gap-4">
           <div className="flex items-center justify-center p-2 rounded-md">

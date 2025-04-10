@@ -73,7 +73,7 @@ export default function Buckets() {
                     ? bucket.globalAliases[0]
                     : bucket.id.substring(0, 8)
                 }
-                id={bucket.id.substring(0, 12)}
+                id={bucket.id}
                 size={formatBytes(bucketInfoMap[bucket.id]?.bytes || 0)}
               />
             ))

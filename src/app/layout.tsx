@@ -9,7 +9,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="">
       <body className={`bg-background text-foreground`}>
         <SidebarProvider>
           <div className="flex h-screen">
