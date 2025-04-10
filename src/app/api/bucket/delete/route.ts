@@ -14,7 +14,6 @@ export async function DELETE(request: Request) {
             });
         }
         
-        // Ensure we're using the correct endpoint format
         await makeDeleteRequest(`bucket?id=${id}`);
         
         return new Response(null, { status: 204 });

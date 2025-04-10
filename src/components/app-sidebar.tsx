@@ -43,7 +43,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/",
       icon: LayoutDashboardIcon,
     },
     {
@@ -53,18 +53,8 @@ const data = {
     },
     {
       title: "Analytics",
-      url: "#",
+      url: "/analytics",
       icon: BarChartIcon,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: FolderIcon,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: UsersIcon,
     },
   ],
   navClouds: [
@@ -166,9 +156,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="">
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={data.navSecondary} className="mt-auto cursor-pointer" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
