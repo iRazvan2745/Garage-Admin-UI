@@ -1,4 +1,4 @@
-import { Home, PaintBucket } from "lucide-react"
+import { Home, Key, PaintBucket } from "lucide-react"
 
 import {
   Sidebar,
@@ -24,12 +24,17 @@ const items = [
     title: "Buckets",
     url: "/dashboard/buckets",
     icon: PaintBucket,
+  },
+  {
+    title: "Keys",
+    url: "/dashboard/keys",
+    icon: Key,
   }
 ]
 
 export function AppSidebar() {
   return (
-    <Sidebar className="bg-neutral-900 text-gray-200">
+    <Sidebar className="text-gray-200">
       <SidebarContent>
         <SidebarHeader>
           <Logo />

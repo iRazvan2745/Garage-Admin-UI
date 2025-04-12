@@ -24,3 +24,8 @@ export interface BucketInfo {
   localAliases: string[];
   description?: string;
 }
+
+export interface KeyList {
+  id: string;
+  name: string;
+}
