@@ -16,7 +16,7 @@ export async function DELETE(request: Request) {
         
         await makeDeleteRequest(`bucket?id=${id}`);
         
-        return new Response(null, { status: 204 });
+        return new Response(JSON.stringify({ success: true, message: `Bucket ${id} deleted successfully` }), { status: 200 });
         
     } catch (error: any) {
         console.error("API error:", error);

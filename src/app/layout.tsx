@@ -1,25 +1,23 @@
-import "./globals.css"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider"
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" className="">
-      <body className={`bg-background text-foreground`}>
-        <SidebarProvider>
-          <div className="flex h-screen">
-            <AppSidebar />
-            <main className="">
-              {children}
-            </main>
-          </div>
-        </SidebarProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
