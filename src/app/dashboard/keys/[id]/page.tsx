@@ -74,7 +74,7 @@ function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-full bg-neutral-950 p-6">
+      <div className="h-screen w-full bg-neutral-900 p-6">
         <div className="space-y-4">
           <Skeleton className="h-8 w-1/3 bg-neutral-800" />
           <Skeleton className="h-4 w-2/3 bg-neutral-800" />
@@ -90,7 +90,7 @@ function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
 
   if (error) {
     return (
-      <div className="h-screen w-full bg-neutral-950 p-6">
+      <div className="h-screen w-full bg-neutral-900 p-6">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -101,7 +101,7 @@ function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
   }
 
   return (
-    <div className="min-h-screen w-full bg-neutral-900 text-gray-200 p-6 overflow-auto">
+    <div className="min-h-screen w-full text-gray-200 p-6 overflow-auto">
       <div className="space-y-6 max-w-5xl mx-auto">
         {/* Key Header */}
         <div>

@@ -147,7 +147,7 @@ export default function NodesContent() {
                   <div className="flex items-center text-sm">
                     <HardDrive className="h-4 w-4 mr-2" />
                     <span className="text-muted-foreground">
-                      {formatBytes(node.dataPartition.available)} / {formatBytes(node.dataPartition.total)}
+                      {formatBytes(node.dataPartition.total - node.dataPartition.available)} / {formatBytes(node.dataPartition.total)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
