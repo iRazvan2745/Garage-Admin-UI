@@ -99,7 +99,7 @@ function BucketsContent() {
       </div>
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="bg-neutral-900 text-white border-neutral-700">
+        <DialogContent className="text-white border-neutral-700">
           <DialogHeader>
             <DialogTitle>Create New Bucket</DialogTitle>
           </DialogHeader>
@@ -119,7 +119,7 @@ function BucketsContent() {
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={handleCreateBucket} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleCreateBucket} disabled={isCreating} className="bg-white text-black hover:bg-white/80 duration-200">
               {isCreating ? "Creating..." : "Create"}
             </Button>
           </DialogFooter>

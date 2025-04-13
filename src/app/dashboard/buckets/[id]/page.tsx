@@ -75,7 +75,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-full bg-neutral-900 p-6">
+      <div className="h-screen w-full p-6">
         <div className="space-y-4">
           <Skeleton className="h-8 w-1/3 bg-neutral-800" />
           <Skeleton className="h-4 w-2/3 bg-neutral-800" />
@@ -91,7 +91,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
 
   if (error) {
     return (
-      <div className="h-screen w-full bg-neutral-900 p-6">
+      <div className="h-screen w-full p-6">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -112,7 +112,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="bg-neutral-950 border-neutral-800 text-gray-200 overflow-hidden">
+          <Card className="border-neutral-800 text-gray-200 overflow-hidden">
             <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <Database className="h-4 w-4 text-gray-400" />
@@ -131,7 +131,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
             </CardContent>
           </Card>
 
-          <Card className="bg-neutral-950 border-neutral-800 text-gray-200 overflow-hidden">
+          <Card className="border-neutral-800 text-gray-200 overflow-hidden">
             <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <HardDrive className="h-4 w-4 text-gray-400" />
@@ -154,7 +154,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
             </CardContent>
           </Card>
 
-          <Card className="bg-neutral-950 border-neutral-800 text-gray-200 md:col-span-2 overflow-hidden">
+          <Card className="border-neutral-800 text-gray-200 md:col-span-2 overflow-hidden">
             <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <Upload className="h-4 w-4 text-gray-400" />
@@ -189,7 +189,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
             </CardContent>
           </Card>
           
-          <Card className="bg-neutral-950 border-neutral-800 text-gray-200 overflow-hidden">
+          <Card className="border-neutral-800 text-gray-200 overflow-hidden">
             <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <Key className="h-4 w-4 text-gray-400" />
@@ -236,4 +236,4 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
       </div>
     </div>
   )
-}
+} 
