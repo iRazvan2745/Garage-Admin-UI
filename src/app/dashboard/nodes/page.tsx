@@ -1,16 +1,14 @@
 "use client"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import KeysContent from "@/components/keys-content"
-import { Link } from "lucide-react"
+import NodesContent from "@/components/node-content"
 
 const queryClient = new QueryClient()
 
-export default function Keys() {
+export default function Nodes() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Link href={`/dashboard/keys/{id}`} >Add New Key</Link>
-      <KeysContent />
+      <NodesContent />
     </QueryClientProvider>
   )
 }

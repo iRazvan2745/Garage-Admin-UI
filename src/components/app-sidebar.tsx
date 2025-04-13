@@ -1,4 +1,4 @@
-import { Home, Key, PaintBucket } from "lucide-react"
+import { Home, Key, PaintBucket, Server } from "lucide-react"
 
 import {
   Sidebar,
@@ -24,6 +24,11 @@ const items = [
     title: "Buckets",
     url: "/dashboard/buckets",
     icon: PaintBucket,
+  },
+  {
+    title: "Nodes",
+    url: "/dashboard/nodes",
+    icon: Server,
   },
   {
     title: "Keys",

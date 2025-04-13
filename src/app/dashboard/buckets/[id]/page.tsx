@@ -6,16 +6,32 @@ import { formatBytes } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Database, HardDrive, Upload } from "lucide-react"
+import { AlertCircle, Database, HardDrive, Upload, Key } from "lucide-react"
 
 type Params = {
   id: string
+}
+
+type KeyPermission = {
+  read: boolean
+  write: boolean
+  owner: boolean
+}
+
+type BucketKey = {
+  accessKeyId: string
+  name: string
+  permissions: KeyPermission
+  bucketLocalAliases: string[]
 }
 
 type BucketData = {
   id: string
   globalAliases?: string[]
   description?: string
+  websiteAccess: boolean
+  websiteConfig: any
+  keys: BucketKey[]
   objects: number
   bytes: number
   unfinishedUploads: number
@@ -23,8 +39,8 @@ type BucketData = {
   unfinishedMultipartUploadParts: number
   unfinishedMultipartUploadBytes: number
   quotas?: {
-    maxSize?: number
-    maxObjects?: number
+    maxSize?: number | null
+    maxObjects?: number | null
   }
 }
 
@@ -86,20 +102,18 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
   }
 
   return (
-    <div className="h-screen w-full bg-neutral-900 text-gray-200 p-6 overflow-auto">
+    <div className="h-full w-full bg-neutral-900 text-gray-200 p-6 overflow-auto">
       <div className="space-y-6 max-w-5xl mx-auto">
-        {/* Bucket Header */}
+
         <div>
           <h1 className="text-2xl font-medium">{bucket?.globalAliases?.[0] || bucket?.id}</h1>
           <p className="text-sm text-gray-400">ID: {id}</p>
           <p className="text-sm text-gray-400 mt-1">{bucket?.description || "No description available"}</p>
         </div>
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Storage Card */}
           <Card className="bg-neutral-950 border-neutral-800 text-gray-200 overflow-hidden">
-            <CardContent className="p-0">
+            <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <Database className="h-4 w-4 text-gray-400" />
                 <span className="text-sm font-medium">Storage</span>
@@ -117,9 +131,8 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
             </CardContent>
           </Card>
 
-          {/* Quotas Card */}
           <Card className="bg-neutral-950 border-neutral-800 text-gray-200 overflow-hidden">
-            <CardContent className="p-0">
+            <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <HardDrive className="h-4 w-4 text-gray-400" />
                 <span className="text-sm font-medium">Quotas</span>
@@ -141,9 +154,8 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
             </CardContent>
           </Card>
 
-          {/* Unfinished Uploads Card - Full Width */}
           <Card className="bg-neutral-950 border-neutral-800 text-gray-200 md:col-span-2 overflow-hidden">
-            <CardContent className="p-0">
+            <CardContent className="p-4">
               <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
                 <Upload className="h-4 w-4 text-gray-400" />
                 <span className="text-sm font-medium">Unfinished Uploads</span>
@@ -173,6 +185,50 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
                     </span>
                   </div>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-neutral-950 border-neutral-800 text-gray-200 overflow-hidden">
+            <CardContent className="p-4">
+              <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
+                <Key className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium">Access Keys</span>
+              </div>
+              <div className="p-4">
+                {bucket?.keys && bucket.keys.length > 0 ? (
+                  <div className="space-y-4">
+                    {bucket.keys.map(key => (
+                      <div key={key.accessKeyId} className="border border-neutral-800 rounded-md p-8">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="font-medium">{key.name}</div>
+                            <div className="text-sm text-gray-400">{key.accessKeyId}</div>
+                          </div>
+                          <div className="flex gap-2">
+                            {key.permissions.read && (
+                              <span className="px-2 py-1 bg-blue-900/30 text-blue-400 text-xs rounded">Read</span>
+                            )}
+                            {key.permissions.write && (
+                              <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded">Write</span>
+                            )}
+                            {key.permissions.owner && (
+                              <span className="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded">Owner</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center mt-2">
+                          <div className="text-sm text-gray-400">Local Aliases</div>
+                          <div className="text-sm font-medium">
+                            {key.bucketLocalAliases.join(", ") || "No aliases"}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 text-gray-400">No access keys available for this bucket</div>
+                )}
               </div>
             </CardContent>
           </Card>

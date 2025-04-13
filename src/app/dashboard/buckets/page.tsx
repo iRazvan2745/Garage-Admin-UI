@@ -63,17 +63,19 @@ function BucketsContent() {
     }
   }
 
-  if (isLoading) return <div className="container mx-auto p-6 text-white">Loading buckets...</div>
+  if (isLoading) return (
+  <div className="container mx-auto p-6 text-white h-full w-full bg-neutral-900">Loading buckets...</div>)
+
   if (fetchError)
     return (
       <div className="container mx-auto p-6 text-red-500">Error loading buckets: {(fetchError as Error).message}</div>
     )
 
   return (
-    <div className="container mx-auto p-6 bg-neutral-900">
+    <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-white">My Buckets</h1>
-        <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-white text-black text-shadow-2xs hover:bg-white/80">
           <Plus className="mr-2 h-4 w-4" /> New Bucket
         </Button>
       </div>
@@ -129,8 +131,10 @@ function BucketsContent() {
 
 export default function Buckets() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BucketsContent />
-    </QueryClientProvider>
+    <div className="h-full w-full bg-neutral-900">
+      <QueryClientProvider client={queryClient}>
+        <BucketsContent />
+      </QueryClientProvider>
+    </div>
   )
 }

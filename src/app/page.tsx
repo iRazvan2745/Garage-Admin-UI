@@ -9,7 +9,7 @@ export default function Home() {
     router.push('/dashboard');
   }, [router]);
   return (
-    <div>
+    <div className="h-full w-full bg-neutral-900">
       <p>Redirecting...</p>
     </div>
   );

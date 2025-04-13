@@ -29,3 +29,25 @@ export interface KeyList {
   id: string;
   name: string;
 }
+
+export interface NodeRole {
+  id: string;
+  zone: string;
+  capacity: number;
+  tags: string[];
+}
+
+export interface Node {
+  id: string;
+  role: NodeRole[];
+  addr: string;
+  hostname: string
+  isUp: boolean
+  lastSeenSecondsAgo: number
+  dataPartition: string[]
+  metadataPartition: string[]
+}
+
+export interface NodeList {
+  nodes: Node[]
+}

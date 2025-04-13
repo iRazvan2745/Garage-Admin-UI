@@ -19,7 +19,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-            <div className="h-screen w-full bg-neutral-900 p-6">
+            <div>
               {children}
             </div>
           </ThemeProvider>

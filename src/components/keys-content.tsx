@@ -46,7 +46,7 @@ export default function KeysContent() {
   }
 
   return (
-    <div className="container py-6">
+    <div className="container py-6 m-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Access Keys</h1>
         <Button>
@@ -55,7 +55,7 @@ export default function KeysContent() {
       </div>
 
       {keys && keys.length > 0 ? (
-        <div className="grid gap-4">
+        <div className="grid grid-cols-5 gap-1">
           {keys.map((key) => (
             <Card key={key.id}>
               <CardHeader className="pb-2">
