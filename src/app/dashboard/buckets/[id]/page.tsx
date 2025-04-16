@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Database, HardDrive, Upload, Key } from "lucide-react"
+import BucketDeleteButton from "../../../../components/ui/BucketDeleteButton"
 
 type Params = {
   id: string
@@ -106,9 +107,14 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
       <div className="space-y-6 max-w-5xl mx-auto">
 
         <div>
-          <h1 className="text-2xl font-medium">{bucket?.globalAliases?.[0] || bucket?.id}</h1>
-          <p className="text-sm text-gray-400">ID: {id}</p>
-          <p className="text-sm text-gray-400 mt-1">{bucket?.description || "No description available"}</p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+            <div>
+              <h1 className="text-2xl font-medium">{bucket?.globalAliases?.[0] || bucket?.id}</h1>
+              <p className="text-sm text-gray-400">ID: {id}</p>
+              <p className="text-sm text-gray-400 mt-1">{bucket?.description || "No description available"}</p>
+            </div>
+            <BucketDeleteButton bucketId={id} />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

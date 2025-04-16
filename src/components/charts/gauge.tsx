@@ -14,4 +14,4 @@ function Gauge({ value, legend, icon }: { value: number | string, legend: string
   );
 }
 
-export default { Gauge }
+export default Gauge

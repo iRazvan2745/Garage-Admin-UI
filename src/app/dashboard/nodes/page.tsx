@@ -7,8 +7,10 @@ const queryClient = new QueryClient()
 
 export default function Nodes() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <NodesContent />
-    </QueryClientProvider>
+    <div className="h-full w-full bg-neutral-900">
+      <QueryClientProvider client={queryClient}>
+        <NodesContent />
+      </QueryClientProvider>
+    </div>
   )
 }
