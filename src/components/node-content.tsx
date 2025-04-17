@@ -52,9 +52,9 @@ export default function NodesContent() {
     }
   }
 
-/*  if (isLoading) { broken
+  if (isLoading) {
     return (
-      <div className="container py-6 m-6 pl-4 space-y-4">
+      <div className="container px-4 py-6 space-y-4">
         <div className="flex justify-between items-center mb-6">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-10 w-24" />
@@ -78,7 +78,7 @@ export default function NodesContent() {
       </div>
     )
   }
-*/
+
 
   if (error) {
     return (
@@ -91,7 +91,7 @@ export default function NodesContent() {
   }
 
   return (
-    <div className="container py-6 m-6 pl-4">
+    <div className="container px-4 py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Nodes</h1>
         <Button onClick={() => setIsDialogOpen(true)}>
@@ -124,13 +124,13 @@ export default function NodesContent() {
         </DialogContent>
       </Dialog>
       {nodes && nodes.length > 0 ? (
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {nodes.map((node: any) => (
             <Link key={node.id} href={`/dashboard/nodes/${node.id}`}>
-              <Card className="overflow-hidden hover:bg-neutral-950/60 cursor-pointer duration-300">
+              <Card className="overflow-hidden px-4 py-6 hover:bg-neutral-950/60 cursor-pointer duration-300">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg truncate" title={node.id}>
+                    <CardTitle className="text-lg font-semibold truncate max-w-[160px]" title={node.id}>
                       {node.hostname || node.id.substring(0, 10) + '...'}
                     </CardTitle>
                     {node.isUp ? 
@@ -151,7 +151,7 @@ export default function NodesContent() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Zone: {node.role.zone}</span>
+                    <span className="text-muted-foreground">Zone: {node?.role?.zone ?? "N/A"}</span>
                     <span className="text-muted-foreground">
                       {node.lastSeenSecsAgo !== null 
                         ? `Last seen ${node.lastSeenSecsAgo}s ago` 

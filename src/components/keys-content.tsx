@@ -19,6 +19,8 @@ export default function KeysContent() {
   const [open, setOpen] = useState(false)
   const [newKeyName, setNewKeyName] = useState("")
   const [isCreating, setIsCreating] = useState(false)
+  const [credentials, setCredentials] = useState<{ accessKeyId: string; secretAccessKey: string } | null>(null)
+  const [credentialsDialogOpen, setCredentialsDialogOpen] = useState(false)
 
   const { data: keys, isLoading, error, refetch } = useQuery<KeyList[]>({
     queryKey: ['keys'],
@@ -36,15 +38,20 @@ export default function KeysContent() {
       toast.error("Key name cannot be empty")
       return
     }
-    
+
     setIsCreating(true)
     try {
-      const response = await fetch('/api/keys/create?name=' + encodeURIComponent(newKeyName))
-      
+      const response = await fetch('/api/keys/create?name=' + encodeURIComponent(newKeyName), { method: 'POST' })
+
       if (!response.ok) {
         throw new Error('Failed to create key')
       }
-      
+      const data = await response.json();
+      setCredentials({
+        accessKeyId: data.accessKeyId,
+        secretAccessKey: data.secretAccessKey,
+      })
+      setCredentialsDialogOpen(true)
       toast.success("Access key created successfully")
       setOpen(false)
       setNewKeyName("")
@@ -139,6 +146,70 @@ export default function KeysContent() {
               {isCreating ? "Creating..." : "Create Key"}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Credentials Dialog */}
+      <Dialog open={credentialsDialogOpen} onOpenChange={(open) => {
+        setCredentialsDialogOpen(open);
+        if (!open) setCredentials(null);
+      }}>
+        <DialogContent className="max-w-[420px] w-full rounded-xl border border-neutral-800 shadow-md p-0">
+          <div className="flex items-center gap-2 px-6 pt-6 pb-2">
+            <AlertCircle className="w-5 h-5 text-yellow-500" />
+            <span className="text-base font-semibold text-white">Access Key Created</span>
+          </div>
+          <div className="px-6 pb-1">
+            <p className="text-xs text-muted-foreground mb-3">
+              Please <span className="font-semibold">copy your credentials now</span>. The secret key will <span className="underline">not</span> be shown again!
+            </p>
+            {credentials && (
+              <div className="bg-neutral-950 border border-neutral-800 rounded-lg px-5 py-3 mt-2 mb-2">
+                <div className="grid gap-2">
+                  {/* Access Key ID Row */}
+                  <div className="flex items-center gap-1">
+                    <span className="min-w-[140px] text-right font-medium text-xs text-white">Access Key ID:</span>
+                    <span className="font-sans bg-neutral-900 border border-neutral-800 rounded px-2 py-1 text-xs select-all break-all flex-1">
+                      {credentials.accessKeyId}
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="px-2 ml-1 font-medium text-xs h-7 cursor-pointer"
+                      onClick={() => navigator.clipboard.writeText(credentials.accessKeyId).then(() => toast.success("Access Key ID copied to clipboard"))}
+                      title="Copy Access Key ID"
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                  {/* Secret Access Key Row */}
+                  <div className="flex items-start gap-1">
+                    <span className="min-w-[140px] text-right font-medium text-xs text-white pt-1">Secret Access Key:</span>
+                    <span className="font-mono bg-neutral-900 border border-neutral-800 rounded px-2 py-1 text-xs select-all break-all flex-1">
+                      {credentials.secretAccessKey}
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="px-2 ml-1 font-medium text-xs h-7 mt-1"
+                      onClick={() => navigator.clipboard.writeText(credentials.secretAccessKey).then(() => toast.success("Secret Access Key copied to clipboard"))}
+                      title="Copy Secret Access Key"
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end px-6 pb-5 pt-1 mt-2">
+            <Button onClick={() => {
+              setCredentialsDialogOpen(false);
+              setCredentials(null);
+            }} className="w-24">
+              Close
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
