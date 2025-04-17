@@ -1,7 +1,7 @@
 "use client"
 
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query"
-import { use } from "react"
+import { use, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -9,6 +9,8 @@ import { toast } from "sonner"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Key, Lock, Shield } from "lucide-react"
 import KeyDeleteButton from "@/components/ui/KeyDeleteButton"
+import AddKeyToBucketDialog from "@/components/AddKeyToBucketDialog";
+import AddAccessKeyToBucketDialog from "@/components/AddAccessKeyToBucketDialog"
 
 type Params = {
   id: string
@@ -59,6 +61,8 @@ export default function KeyViewer({ params }: { params: Promise<Params> | Params
 }
 
 function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
+  const [addKeyDialogOpen, setAddKeyDialogOpen] = useState(false);
+  const [addKeyBucketId, setAddKeyBucketId] = useState("");
   const resolvedParams = params instanceof Promise ? use(params) : params
   const { id } = resolvedParams
 
@@ -107,10 +111,25 @@ function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
   }
 
   return (
-    <div className="min-h-screen w-full flex justify-center items-stretch bg-gradient-to-br from-neutral-900 via-neutral-950 to-black text-gray-200 p-0 overflow-auto animate-fade-in">
-      <div className="flex-1 flex flex-col space-y-8 max-w-4xl mx-auto py-10 px-4 sm:px-8 md:px-12 lg:px-0">
+    <div className="min-h-screen w-full flex justify-center items-stretch bg-neutral-900 text-gray-200 p-0 overflow-auto">
+      <div className="flex-1 flex flex-col space-y-8 max-w-4xl mx-auto py-10 px-4">
         {/* Key Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 bg-neutral-950/90 border border-neutral-800 rounded-2xl shadow-lg p-8 mb-2 ring-1 ring-neutral-800/40">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 bg-neutral-950 border border-neutral-800 rounded-xl p-6 mb-2">
+          {/* Add Access Key to Bucket Button */}
+          <div className="flex justify-end w-full mb-2">
+            <Button variant="outline" size="sm" onClick={() => setAddKeyDialogOpen(true)}>
+              Add Access Key to Bucket
+            </Button>
+            <AddAccessKeyToBucketDialog
+              bucketId={addKeyBucketId}
+              open={addKeyDialogOpen}
+              onOpenChange={open => {
+                setAddKeyDialogOpen(open);
+                if (!open) setAddKeyBucketId("");
+              }}
+              afterAllow={() => window.location.reload()}
+            />
+          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
               <Key className="w-7 h-7 text-yellow-500" />
@@ -159,9 +178,9 @@ function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
           )}
         </div>
         {/* Permissions */}
-        <Card className="border-neutral-800 bg-neutral-950/80 rounded-2xl shadow-lg ring-1 ring-neutral-800/30">
+        <Card className="border-neutral-800 bg-neutral-950 rounded-xl">
           <CardContent>
-            <div className="p-6 space-y-4">
+            <div className="p-4 space-y-4">
               <h3 className="font-semibold mb-2 text-lg">Global Permissions</h3>
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2" title="Can create new buckets">
@@ -178,51 +197,69 @@ function KeyViewerContent({ params }: { params: Promise<Params> | Params }) {
         <div className="space-y-6">
           <h3 className="font-semibold text-lg mt-2">Bucket Access ({data?.buckets?.length || 0})</h3>
           {data?.buckets && data.buckets.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {data.buckets.map((bucket) => (
-                <Card key={bucket.id} className="border border-neutral-800 bg-neutral-950/90 rounded-2xl shadow-lg ring-1 ring-neutral-800/20 hover:ring-yellow-600/30 transition-all">
-                  <CardContent className="p-0">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-6">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <Key className="w-5 h-5 text-blue-400" />
-                          <h4 className="font-semibold text-base truncate">
-                            {bucket.globalAliases[0] || bucket.id.substring(0, 8)}
-                          </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               {data.buckets.map((bucket) => {
+                const hasAllPermissions = bucket.permissions.read && bucket.permissions.write && bucket.permissions.owner;
+                const [dialogOpen, setDialogOpen] = useState(false);
+                return (
+                  <Card key={bucket.id} className="border border-gray-200 bg-white rounded p-4">
+                    <CardContent>
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <Key className="w-5 h-5 text-blue-400" />
+                            <h4 className="font-semibold text-base truncate">
+                              {bucket.globalAliases[0] || bucket.id.substring(0, 8)}
+                            </h4>
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-gray-400">ID:</span>
+                            <span className="font-mono text-xs bg-neutral-900 px-2 py-1 rounded border border-neutral-800 select-all">{bucket.id}</span>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="ml-1 px-2 h-7 w-7"
+                              onClick={() => {navigator.clipboard.writeText(bucket.id); toast.success("Bucket ID copied to clipboard")}}
+                              title="Copy Bucket ID"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16h8m-4-4h4m-6 8a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H8zm0 0H6a2 2 0 01-2-2V8a2 2 0 012-2h2" /></svg>
+                            </Button>
+                          </div>
+                          {bucket.localAliases.length > 0 && (
+                            <p className="text-xs text-gray-400 mt-1">Local Aliases: {bucket.localAliases.join(', ')}</p>
+                          )}
+                          {!hasAllPermissions && (
+                            <div className="mt-3">
+                              <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)}>
+                                Allow Key on Bucket
+                              </Button>
+                              <AddKeyToBucketDialog
+                                bucketId={bucket.id}
+                                accessKeyId={data.accessKeyId}
+                                open={dialogOpen}
+                                onOpenChange={setDialogOpen}
+                                afterAllow={() => window.location.reload()}
+                              />
+                            </div>
+                          )}
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-400">ID:</span>
-                          <span className="font-mono text-xs bg-neutral-900 px-2 py-1 rounded border border-neutral-800 select-all">{bucket.id}</span>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="ml-1 px-2 h-7 w-7"
-                            onClick={() => {navigator.clipboard.writeText(bucket.id); toast.success("Bucket ID copied to clipboard")}}
-                            title="Copy Bucket ID"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16h8m-4-4h4m-6 8a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H8zm0 0H6a2 2 0 01-2-2V8a2 2 0 012-2h2" /></svg>
-                          </Button>
+                        <div className="flex gap-2 flex-wrap mt-2 md:mt-0">
+                          {bucket.permissions.read && <span className="text-xs bg-blue-900/80 text-blue-200 px-2 py-1 rounded font-semibold" title="Read access">Read</span>}
+                          {bucket.permissions.write && <span className="text-xs bg-green-900/80 text-green-200 px-2 py-1 rounded font-semibold" title="Write access">Write</span>}
+                          {bucket.permissions.owner && <span className="text-xs bg-purple-900/80 text-purple-200 px-2 py-1 rounded font-semibold" title="Owner access">Owner</span>}
                         </div>
-                        {bucket.localAliases.length > 0 && (
-                          <p className="text-xs text-gray-400 mt-1">Local Aliases: {bucket.localAliases.join(', ')}</p>
-                        )}
                       </div>
-                      <div className="flex gap-2 flex-wrap mt-2 md:mt-0">
-                        {bucket.permissions.read && <span className="text-xs bg-blue-900/80 text-blue-200 px-2 py-1 rounded font-semibold" title="Read access">Read</span>}
-                        {bucket.permissions.write && <span className="text-xs bg-green-900/80 text-green-200 px-2 py-1 rounded font-semibold" title="Write access">Write</span>}
-                        {bucket.permissions.owner && <span className="text-xs bg-purple-900/80 text-purple-200 px-2 py-1 rounded font-semibold" title="Owner access">Owner</span>}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           ) : (
-            <Card className="bg-gradient-to-br from-neutral-950/90 via-neutral-900/80 to-neutral-950/80 border border-neutral-800 rounded-2xl flex items-center justify-center py-14 shadow-xl ring-1 ring-yellow-800/20">
+            <Card className="bg-neutral-950 border border-neutral-800 rounded-xl flex items-center justify-center py-12">
               <CardContent className="flex flex-col items-center">
-                <Lock className="h-10 w-10 text-yellow-400 mb-4 drop-shadow-lg animate-bounce-slow" />
-                <p className="text-xl font-bold text-yellow-200 mb-1">No Bucket Access</p>
-                <p className="text-base text-gray-400">This key does not have access to any buckets.</p>
+                <Lock className="h-8 w-8 text-yellow-400 mb-3" />
+                <p className="text-lg font-semibold text-white mb-1">No Bucket Access</p>
+                <p className="text-sm text-gray-400">This key does not have access to any buckets.</p>
               </CardContent>
             </Card>
           )}

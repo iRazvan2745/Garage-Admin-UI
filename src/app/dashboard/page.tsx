@@ -63,7 +63,7 @@ function DashboardContent() {
   const storagePercentage = totalStorage > 0 ? Math.round((usedStorage / totalStorage) * 100) : 0
 
   return (
-    <div className="container mx-auto p-6 bg-neutral-950 min-h-screen text-neutral-100">
+    <div className="container mx-auto p-6 min-h-screen text-neutral-100">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2 text-muted-foreground mb-1">
@@ -102,7 +102,7 @@ function DashboardContent() {
         </Alert>
       ) : (
         <div className="space-y-6">
-          <Card className="border-none shadow-md bg-gradient-to-r from-neutral-900 to-neutral-800 text-neutral-100">
+          <Card className="border-none shadow-md text-neutral-100">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div

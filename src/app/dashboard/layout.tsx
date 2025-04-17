@@ -12,17 +12,19 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <SidebarProvider>
-          <AppSidebar />
-          <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-            <div>
-              {children}
-            </div>
-          </ThemeProvider>
+          <div className="flex min-h-screen w-full">
+            <AppSidebar />
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+              <main className="flex-1 ml-64">
+                {children}
+              </main>
+            </ThemeProvider>
+          </div>
         </SidebarProvider>
       </body>
     </html>

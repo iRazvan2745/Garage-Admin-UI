@@ -1,13 +1,15 @@
 "use client"
 
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query"
-import { use } from "react"
+import { use, useState } from "react"
 import { formatBytes } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Database, HardDrive, Upload, Key } from "lucide-react"
 import BucketDeleteButton from "../../../../components/ui/BucketDeleteButton"
+import AddKeyToBucketDialog from "@/components/AddKeyToBucketDialog";
 
 type Params = {
   id: string
@@ -56,6 +58,8 @@ export default function BucketViewer({ params }: { params: Promise<Params> | Par
 }
 
 function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
+  const [addKeyDialogOpen, setAddKeyDialogOpen] = useState(false);
+  const [addKeyAccessKeyId, setAddKeyAccessKeyId] = useState("");
   const resolvedParams = params instanceof Promise ? use(params) : params
   const { id } = resolvedParams
 
@@ -202,6 +206,22 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
                 <span className="text-sm font-medium">Access Keys</span>
               </div>
               <div className="p-4">
+                {/* Add Key to Bucket Button */}
+                <div className="flex justify-end mb-4">
+                  <Button variant="outline" size="sm" onClick={() => setAddKeyDialogOpen(true)}>
+                    Add Key to Bucket
+                  </Button>
+                  <AddKeyToBucketDialog
+                    bucketId={bucket.id}
+                    accessKeyId={addKeyAccessKeyId}
+                    open={addKeyDialogOpen}
+                    onOpenChange={open => {
+                      setAddKeyDialogOpen(open);
+                      if (!open) setAddKeyAccessKeyId("");
+                    }}
+                    afterAllow={() => window.location.reload()}
+                  />
+                </div>
                 {bucket?.keys && bucket.keys.length > 0 ? (
                   <div className="space-y-4">
                     {bucket.keys.map(key => (
