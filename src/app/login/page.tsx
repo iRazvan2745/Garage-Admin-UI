@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect, SetStateAction } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { authClient, signIn } from "@/lib/auth-client"
-import { cn } from "@/lib/utils"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -43,8 +43,8 @@ export default function AuthPage() {
 
   function getErrorMessage(err: unknown): string | undefined {
     if (typeof err === "string") return err;
-    if (err && typeof err === "object" && "message" in err && typeof (err as any).message === "string") {
-      return (err as any).message;
+    if (err && typeof err === "object" && 'message' in err && typeof (err as { message?: unknown }).message === "string") {
+      return (err as { message: string }).message;
     }
     return undefined;
   }
@@ -107,7 +107,7 @@ export default function AuthPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete="current-password"
-                      required
+                      required  
                       disabled={loading}
                       className="pr-10"
                     />

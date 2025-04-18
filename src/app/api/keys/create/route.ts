@@ -1,4 +1,5 @@
 import { makePostRequest } from "@/lib/makeRequest";
+import type { KeyList } from "@/lib/types";
 
 export async function POST(request: Request) {
     const url = new URL(request.url);
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
             body: JSON.stringify(
                 name ? { name } : {}
             )
-        });
+        }) as KeyList;
         
         console.log("Key created:", key.id);
         
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
-    } catch (error: unknown) {
+    } catch (error: unknown) {  
         console.error("API error:", error);
         let message = "Failed to create key";
         let code = "";

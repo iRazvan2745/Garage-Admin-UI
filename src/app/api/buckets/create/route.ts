@@ -1,6 +1,7 @@
 import { makePostRequest, makePutRequest } from "@/lib/makeRequest";
+import type { BucketInfo as BucketData } from "@/lib/types";
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const name = url.searchParams.get('name');
     console.log("Bucket name parameter:", name);
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
         // 1. First create the bucket
         const bucket = await makePostRequest('bucket', {
             body: JSON.stringify({})
-        });
+          }) as BucketData;
         
         console.log("Bucket created:", bucket.id);
         
@@ -37,12 +38,10 @@ export async function POST(request: Request) {
     } catch (error: unknown) {
         console.error("API error:", error);
         let message = "Failed to create bucket";
-        if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as { message: string }).message === 'string') {
-            message = (error as { message: string }).message;
-        }
         let statusCode = 400;
-        if (typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: string }).code === 'string') {
-            if ((error as { code: string }).code === 'AccessDenied') {
+        if (error instanceof Error) {
+            message = error.message;
+            if (error.name === 'AccessDenied') {
                 statusCode = 403;
             }
         }

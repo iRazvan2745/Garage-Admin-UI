@@ -1,7 +1,6 @@
 "use client";
 
 import { authClient, useSession } from "@/lib/auth-client";
-
 import { useState, useRef } from "react";
 
 export function AuthButton() {
@@ -13,7 +12,7 @@ export function AuthButton() {
   if (!user) {
     return (
       <button
-        onClick={() => authClient.signIn()}
+        onClick={() => window.location.href = "/login"}
         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium shadow transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         Sign In

@@ -1,5 +1,8 @@
 import { makeRequest } from "@/lib/makeRequest";
 import { NextRequest } from "next/server";
+import type { NodeList } from "@/lib/types";
+
+
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -11,8 +14,8 @@ export async function GET(request: NextRequest) {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-  
-  const statusResponse = await makeRequest('status');
+
+  const statusResponse = await makeRequest('status') as NodeList;
   const node = statusResponse.nodes.find((node: { id: string }) => node.id === id);
   
   if (!node) {

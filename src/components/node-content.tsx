@@ -104,7 +104,7 @@ export default function NodesContent() {
           <DialogHeader>
             <DialogTitle>Add New Node</DialogTitle>
             <DialogDescription>
-              Run "garage node id" to get the connect ID
+              Run &quot;garage node id&quot; to get the connect ID
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

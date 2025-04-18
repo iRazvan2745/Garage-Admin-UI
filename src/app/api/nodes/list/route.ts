@@ -1,12 +1,11 @@
 import { makeRequest } from "@/lib/makeRequest"
-import type { NodeList } from "@/lib/types"
 
 export async function GET() {
     try {
-        const response = await makeRequest("status");
-        const nodeList: NodeList[] = response.nodes || [];
-        
-        return new Response(JSON.stringify(nodeList), {
+        const response = await makeRequest('status') as Record<string, unknown>;
+        return new Response(JSON.stringify({
+            ...response,
+        }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });

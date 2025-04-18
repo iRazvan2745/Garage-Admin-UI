@@ -39,8 +39,8 @@ export default function AddAccessKeyToBucketDialog({ bucketId, open, onOpenChang
       toast.success("Key permissions updated!");
       onOpenChange(false);
       if (afterAllow) afterAllow();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(typeof err === 'object' && err && 'message' in err && typeof (err as { message?: unknown }).message === 'string' ? (err as { message: string }).message : 'Unknown error');
     } finally {
       setLoading(false);
     }

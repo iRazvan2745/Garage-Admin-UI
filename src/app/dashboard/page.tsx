@@ -56,11 +56,7 @@ function DashboardContent() {
       return response.json()
     },
   })
-
-  const totalStorage = data?.nodes?.reduce((acc, node) => acc + node.dataPartition.total, 0) || 0
-  const availableStorage = data?.nodes?.reduce((acc, node) => acc + node.dataPartition.available, 0) || 0
-  const usedStorage = totalStorage - availableStorage
-  const storagePercentage = totalStorage > 0 ? Math.round((usedStorage / totalStorage) * 100) : 0
+  
 
   return (
     <div className="container mx-auto p-6 min-h-screen text-neutral-100">

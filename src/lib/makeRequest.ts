@@ -12,7 +12,7 @@ export async function makeRequest(
   endpoint: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
   options?: RequestInit
-): Promise<any> {
+): Promise<unknown> {
   try {
     const apiUrl = process.env.GARAGE_API_URL;
     const { data, error } = await betterFetch(`${apiUrl}/v1/${endpoint}`, {
@@ -40,14 +40,14 @@ export async function makeRequest(
 export const makePostRequest = (
   endpoint: string, 
   options?: RequestInit
-): Promise<any> => makeRequest(endpoint, 'POST', options);
+): Promise<unknown> => makeRequest(endpoint, 'POST', options);
 
 export const makePutRequest = (
   endpoint: string, 
   options?: RequestInit
-): Promise<any> => makeRequest(endpoint, 'PUT', options);
+): Promise<unknown> => makeRequest(endpoint, 'PUT', options);
 
 export const makeDeleteRequest = (
   endpoint: string, 
   options?: RequestInit
-): Promise<any> => makeRequest(endpoint, 'DELETE', options);
+): Promise<unknown> => makeRequest(endpoint, 'DELETE', options);

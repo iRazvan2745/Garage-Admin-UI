@@ -16,8 +16,7 @@ async function getUsableStorage(nodes: NodeStatus[]) {
 */
 
 export async function GET() {
-  const response = await makeRequest('status');
-  //const usableStorage = await getUsableStorage(response.nodes || []);
+  const response = await makeRequest('status') as Record<string, unknown>;
   return new Response(JSON.stringify({
     ...response,
   }), {
