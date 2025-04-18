@@ -20,7 +20,27 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [, setCheckingUsers] = useState(true);
   const router = useRouter()
+  
+  useEffect(() => {
+    async function checkUsers() {
+      try {
+        const res = await fetch("/api/users/hasUsers");
+        if (!res.ok) throw new Error("Failed to check users");
+        const json = await res.json();
+        if (!json.hasUsers) {
+          router.replace("/register");
+        } else {
+          setCheckingUsers(false);
+        }
+      } catch {
+        // fallback: allow login if check fails
+        setCheckingUsers(false);
+      }
+    }
+    checkUsers();
+  }, [router]);
 
   useEffect(() => {
     if (user) {

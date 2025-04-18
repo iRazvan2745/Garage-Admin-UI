@@ -59,10 +59,10 @@ export function AppSidebar() {
   const user = session?.user;
   const router = useRouter();
 
-  let avatarContent = "GA";
-  let displayName = "Garage Admin";
-  let email = "admin@example.com";
-  let avatarImage = undefined;
+  let avatarContent = "";
+  let displayName = "";
+  let email = "";
+  let avatarImage = "";
 
   if (user) {
     displayName = user.name || user.email;
@@ -111,50 +111,54 @@ export function AppSidebar() {
         {/* Sidebar Footer */}
         <div className="border-t p-4 mt-0">
           {user ? (
-  <div className="flex items-center gap-3">
-    
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="focus:outline-none">
-          <Avatar className="h-8 w-8">
-            {avatarImage ? (
-              <AvatarImage src={avatarImage} alt={displayName} />
-            ) : (
-              <AvatarFallback>{avatarContent}</AvatarFallback>
-            )}
-          </Avatar>
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold">{displayName}</span>
-            <span className="text-xs text-muted-foreground truncate">{email}</span>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-destructive focus:bg-destructive/10 cursor-pointer"
-          onClick={() => authClient.signOut()}
-        >
-          Logout
-        </DropdownMenuItem>
-        {/* Add more menu items here if needed */}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  </div>
-) : (
-  <button
-    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
-    onClick={() => router.push("/login")}
-  >
-    Sign In
-  </button>
-)}
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="focus:outline-none">
+                    <div className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                      {avatarImage ? (
+                        <AvatarImage src={avatarImage} alt={displayName} />
+                      ) : (
+                        <AvatarFallback>{avatarContent}</AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold">{displayName}</span>
+                      <span className="text-xs text-muted-foreground truncate">{email}</span>
+                    </div>
+                  </div>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold">{displayName}</span>
+                      <span className="text-xs text-muted-foreground truncate">{email}</span>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive focus:bg-destructive/10 cursor-pointer"
+                    onClick={() => authClient.signOut()}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                  {/* Add more menu items here if needed */}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <button
+              className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
+              onClick={() => router.push("/login")}
+            >
+              Sign In
+            </button>
+          )}
           {/* You could add Settings/Logout links here */}
         </div>
       </div>
     </div>
   );
 }
-

@@ -1,13 +1,13 @@
-import { useState } from "react"
+"use client"
+
+import { useQuery } from "@tanstack/react-query"
+import { AlertCircle, Database, HardDrive, Upload, Key } from "lucide-react"
+
 import { formatBytes } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Database, HardDrive, Upload, Key } from "lucide-react"
 import BucketDeleteButton from "@/components/ui/BucketDeleteButton"
-import AddKeyToBucketDialog from "@/components/AddKeyToBucketDialog";
-import { useQuery } from "@tanstack/react-query"
 
 type KeyPermission = {
   read: boolean
@@ -42,9 +42,6 @@ type BucketData = {
 }
 
 export default function BucketViewerContent({ id }: { id: string }) {
-  const [addKeyDialogOpen, setAddKeyDialogOpen] = useState(false);
-  const [addKeyAccessKeyId, setAddKeyAccessKeyId] = useState("");
-
   const {
     data: bucket,
     isLoading,
@@ -62,13 +59,13 @@ export default function BucketViewerContent({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-full p-6">
+      <div className="container mx-auto p-6">
         <div className="space-y-4">
-          <Skeleton className="h-8 w-1/3 bg-neutral-800" />
-          <Skeleton className="h-4 w-2/3 bg-neutral-800" />
-          <div className="grid grid-cols-2 gap-4">
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-32 w-full bg-neutral-800" />
+          <Skeleton className="h-8 w-1/3" />
+          <Skeleton className="h-4 w-2/3" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className="h-32 w-full" />
             ))}
           </div>
         </div>
@@ -78,7 +75,7 @@ export default function BucketViewerContent({ id }: { id: string }) {
 
   if (error) {
     return (
-      <div className="h-screen w-full p-6">
+      <div className="container mx-auto p-6">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -89,56 +86,57 @@ export default function BucketViewerContent({ id }: { id: string }) {
   }
 
   return (
-    <div className="h-full w-full bg-neutral-900 text-gray-200 p-6 overflow-auto">
+    <div className="container mx-auto p-6">
       <div className="space-y-6 max-w-5xl mx-auto">
-
-        <div>
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <div>
-              <h1 className="text-2xl font-medium">{bucket?.globalAliases?.[0] || bucket?.id}</h1>
-              <p className="text-sm text-gray-400">ID: {id}</p>
-              <p className="text-sm text-gray-400 mt-1">{bucket?.description || "No description available"}</p>
-            </div>
-            <BucketDeleteButton bucketId={id} />
+        {/* Bucket Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl font-medium">{bucket?.globalAliases?.[0] || bucket?.id}</h1>
+            <p className="text-sm text-muted-foreground">ID: {id}</p>
+            {bucket?.description && <p className="text-sm text-muted-foreground mt-1">{bucket.description}</p>}
           </div>
+          <BucketDeleteButton bucketId={id} />
         </div>
 
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="border-neutral-800 text-gray-200 overflow-hidden">
-            <CardContent className="p-4">
-              <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
-                <Database className="h-4 w-4 text-gray-400" />
+          {/* Storage Card */}
+          <Card>
+            <CardContent className="p-0">
+              <div className="p-4 border-b flex items-center gap-2">
+                <Database className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Storage</span>
               </div>
               <div className="p-4 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Objects</span>
-                  <span className="text-lg font-medium">{bucket?.objects}</span>
+                  <span className="text-muted-foreground">Objects</span>
+                  <span className="font-medium">{bucket?.objects.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Total Size</span>
-                  <span className="text-lg font-medium">{formatBytes(bucket?.bytes || 0)}</span>
+                  <span className="text-muted-foreground">Total Size</span>
+                  <span className="font-medium">{formatBytes(bucket?.bytes || 0)}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-neutral-800 text-gray-200 overflow-hidden">
-            <CardContent className="p-4">
-              <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
-                <HardDrive className="h-4 w-4 text-gray-400" />
+          {/* Quotas Card */}
+          <Card>
+            <CardContent className="p-0">
+              <div className="p-4 border-b flex items-center gap-2">
+                <HardDrive className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Quotas</span>
               </div>
               <div className="p-4 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Max Size</span>
-                  <span className="text-lg font-medium">
+                  <span className="text-muted-foreground">Max Size</span>
+                  <span className="font-medium">
                     {bucket?.quotas?.maxSize ? formatBytes(bucket?.quotas.maxSize) : "Unlimited"}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400">Max Objects</span>
-                  <span className="text-lg font-medium">
+                  <span className="text-muted-foreground">Max Objects</span>
+                  <span className="font-medium">
                     {bucket?.quotas?.maxObjects ? bucket.quotas.maxObjects.toLocaleString() : "Unlimited"}
                   </span>
                 </div>
@@ -146,96 +144,86 @@ export default function BucketViewerContent({ id }: { id: string }) {
             </CardContent>
           </Card>
 
-          <Card className="border-neutral-800 text-gray-200 md:col-span-2 overflow-hidden">
-            <CardContent className="p-4">
-              <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
-                <Upload className="h-4 w-4 text-gray-400" />
+          {/* Unfinished Uploads Card */}
+          <Card className="md:col-span-2">
+            <CardContent className="p-0">
+              <div className="p-4 border-b flex items-center gap-2">
+                <Upload className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Unfinished Uploads</span>
               </div>
-              <div className="grid grid-cols-2 divide-x divide-neutral-800">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
                 <div className="p-4 space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Standard Uploads</span>
-                    <span className="text-lg font-medium">{bucket?.unfinishedUploads}</span>
+                    <span className="text-muted-foreground">Standard Uploads</span>
+                    <span className="font-medium">{bucket?.unfinishedUploads.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Multipart Uploads</span>
-                    <span className="text-lg font-medium">{bucket?.unfinishedMultipartUploads}</span>
+                    <span className="text-muted-foreground">Multipart Uploads</span>
+                    <span className="font-medium">{bucket?.unfinishedMultipartUploads.toLocaleString()}</span>
                   </div>
                 </div>
                 <div className="p-4 space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Multipart Parts</span>
-                    <span className="text-lg font-medium">
-                      {bucket?.unfinishedMultipartUploadParts.toLocaleString()}
-                    </span>
+                    <span className="text-muted-foreground">Multipart Parts</span>
+                    <span className="font-medium">{bucket?.unfinishedMultipartUploadParts.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Multipart Size</span>
-                    <span className="text-lg font-medium">
-                      {formatBytes(bucket?.unfinishedMultipartUploadBytes || 0)}
-                    </span>
+                    <span className="text-muted-foreground">Multipart Size</span>
+                    <span className="font-medium">{formatBytes(bucket?.unfinishedMultipartUploadBytes || 0)}</span>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
-          <Card className="border-neutral-800 text-gray-200 overflow-hidden">
-            <CardContent className="p-4">
-              <div className="p-4 border-b border-neutral-800 flex items-center gap-2">
-                <Key className="h-4 w-4 text-gray-400" />
+
+          {/* Access Keys Card */}
+          <Card className="md:col-span-2">
+            <CardContent className="p-0">
+              <div className="p-4 border-b flex items-center gap-2">
+                <Key className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Access Keys</span>
               </div>
               <div className="p-4">
-                {/* Add Key to Bucket Button */}
-                <div className="flex justify-end mb-4">
-                  <Button variant="outline" size="sm" onClick={() => setAddKeyDialogOpen(true)}>
-                    Add Key to Bucket
-                  </Button>
-                  <AddKeyToBucketDialog
-                    bucketId={id}
-                    accessKeyId={addKeyAccessKeyId}
-                    open={addKeyDialogOpen}
-                    onOpenChange={open => {
-                      setAddKeyDialogOpen(open);
-                      if (!open) setAddKeyAccessKeyId("");
-                    }}
-                    afterAllow={() => window.location.reload()}
-                  />
-                </div>
                 {bucket?.keys && bucket.keys.length > 0 ? (
                   <div className="space-y-4">
-                    {bucket.keys.map(key => (
-                      <div key={key.accessKeyId} className="border border-neutral-800 rounded-md p-8">
-                        <div className="flex justify-between items-start">
+                    {bucket.keys.map((key) => (
+                      <div key={key.accessKeyId} className="border rounded p-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                           <div>
                             <div className="font-medium">{key.name}</div>
-                            <div className="text-sm text-gray-400">{key.accessKeyId}</div>
+                            <div className="text-sm text-muted-foreground font-mono">{key.accessKeyId}</div>
                           </div>
                           <div className="flex gap-2">
                             {key.permissions.read && (
-                              <span className="px-2 py-1 bg-blue-900/30 text-blue-400 text-xs rounded">Read</span>
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-xs rounded">
+                                Read
+                              </span>
                             )}
                             {key.permissions.write && (
-                              <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded">Write</span>
+                              <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 text-xs rounded">
+                                Write
+                              </span>
                             )}
                             {key.permissions.owner && (
-                              <span className="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded">Owner</span>
+                              <span className="px-2 py-1 bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 text-xs rounded">
+                                Owner
+                              </span>
                             )}
                           </div>
                         </div>
-                        <div className="flex justify-between items-center mt-2">
-                          <div className="text-sm text-gray-400">Local Aliases</div>
-                          <div className="text-sm font-medium">
-                            {key.bucketLocalAliases.join(", ") || "No aliases"}
+                        {key.bucketLocalAliases.length > 0 && (
+                          <div className="mt-2 pt-2 border-t">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1">
+                              <span className="text-sm text-muted-foreground">Local Aliases:</span>
+                              <span className="text-sm">{key.bucketLocalAliases.join(", ")}</span>
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-4 text-gray-400">No access keys available for this bucket</div>
+                  <div className="text-center py-4 text-muted-foreground">No access keys available for this bucket</div>
                 )}
               </div>
             </CardContent>
@@ -244,4 +232,4 @@ export default function BucketViewerContent({ id }: { id: string }) {
       </div>
     </div>
   )
-} 
+}
