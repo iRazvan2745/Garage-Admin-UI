@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils"; 
-import Logo from "./Logo"; 
+import Logo from "./logo"; 
 import { usePathname } from "next/navigation";
 
 const systemItems = [
