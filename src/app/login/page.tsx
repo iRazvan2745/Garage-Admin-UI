@@ -56,7 +56,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-screen py-12">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-md">
         <Card>
           <CardHeader>
@@ -74,7 +74,6 @@ export default function AuthPage() {
                     <AlertDescription>{errorMessage}</AlertDescription>
                   </Alert>
                 )}
-                
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -88,7 +87,6 @@ export default function AuthPage() {
                     disabled={loading}
                   />
                 </div>
-                
                 <div className="grid gap-2">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
@@ -107,7 +105,7 @@ export default function AuthPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete="current-password"
-                      required  
+                      required
                       disabled={loading}
                       className="pr-10"
                     />
@@ -118,22 +116,23 @@ export default function AuthPage() {
                       className="absolute right-1 top-1 h-8 w-8 p-0"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       <span className="sr-only">
                         {showPassword ? "Hide password" : "Show password"}
                       </span>
                     </Button>
                   </div>
                 </div>
-                
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Login
                 </Button>
+                <div className="mt-4 text-center text-sm">
+                  Don&apos;t have an account?{" "}
+                  <Link href="/register" className="underline underline-offset-4">
+                    Sign up
+                  </Link>
+                </div>
               </div>
             </form>
           </CardContent>
