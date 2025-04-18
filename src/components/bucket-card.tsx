@@ -17,7 +17,7 @@ export default function BucketCard({
   return (
     <Link href={`/dashboard/buckets/${id}`} className="block h-full w-full">
       <Card className={cn(
-        "h-full w-full bg-neutral-950 border-neutral-900/50 hover:bg-neutral-950/80 transition-all duration-200 overflow-hidden",
+        "h-full w-full border-neutral-900/50 hover:bg-neutral-950/70 transition-all duration-200 overflow-hidden",
         "shadow-lg hover:shadow-lg ",
         className
       )}>

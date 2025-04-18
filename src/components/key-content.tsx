@@ -34,13 +34,6 @@ type KeyData = {
   }[]
 }
 
-/**
- * KeyViewerContent component
- *
- * Displays key details and bucket access information
- *
- * @param id Key ID
- */
 export function KeyViewerContent({ id }: { id: string }) {
   const [openDialogs, setOpenDialogs] = useState<Record<string, boolean>>({})
   const [addKeyDialogOpen, setAddKeyDialogOpen] = useState(false)

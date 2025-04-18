@@ -236,7 +236,7 @@ function DashboardContent() {
                           </div>
                           <div className="w-full bg-slate-100 rounded-full h-2.5">
                             <div
-                              className="bg-blue-600 h-2.5 rounded-full"
+                              className="bg-amber-500 h-2.5 rounded-full"
                               style={{
                                 width: `${100 - calculatePercentage(node.dataPartition.available, node.dataPartition.total)}%`,
                               }}
@@ -258,7 +258,7 @@ function DashboardContent() {
                           </div>
                           <div className="w-full bg-slate-100 rounded-full h-2.5">
                             <div
-                              className="bg-blue-600 h-2.5 rounded-full"
+                              className="bg-amber-500 h-2.5 rounded-full"
                               style={{
                                 width: `${100 - calculatePercentage(node.metadataPartition.available, node.metadataPartition.total)}%`,
                               }}

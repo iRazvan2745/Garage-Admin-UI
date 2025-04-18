@@ -1,14 +1,16 @@
 "use client"
 
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { Plus, FolderPlus, Loader2 } from "lucide-react"
+
 import BucketCard from "@/components/bucket-card"
 import type { Bucket } from "@/lib/types"
-import { useQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function BucketsContent() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -61,47 +63,61 @@ export default function BucketsContent() {
     }
   }
 
-  if (isLoading) return (
-  <div className="container mx-auto p-6 text-white h-full w-full bg-neutral-900">Loading buckets...</div>)
-
-  if (fetchError)
-    return (
-      <div className="container mx-auto p-6 text-red-500">Error loading buckets: {(fetchError as Error).message}</div>
-    )
-
   return (
-    <div className="container mx-auto p-6 m-6">
+    <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-white">My Buckets</h1>
-        <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-white text-black text-shadow-2xs hover:bg-white/80">
+        <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-white text-black hover:bg-white/80">
           <Plus className="mr-2 h-4 w-4" /> New Bucket
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.isArray(buckets) && buckets.length > 0 ? (
-          buckets.map((bucket: Bucket) => (
-            <div key={bucket.id} className="h-[180px] w-full">
-              <BucketCard
-                name={bucket.globalAliases[0] || bucket.id}
-                description={bucket.description || "No description"}
-                id={bucket.id}
-              />
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-[180px] w-full bg-neutral-800" />
+          ))}
+        </div>
+      ) : fetchError ? (
+        <div className="p-4 rounded-md bg-red-900/20 border border-red-800 text-red-200">
+          Error loading buckets: {(fetchError as Error).message}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.isArray(buckets) && buckets.length > 0 ? (
+            buckets.map((bucket: Bucket) => (
+              <div key={bucket.id} className="h-[180px] w-full">
+                <BucketCard
+                  name={bucket.globalAliases[0] || bucket.id}
+                  description={bucket.description || "No description"}
+                  id={bucket.id}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-10 text-center space-y-4 border border-dashed border-neutral-700 rounded-lg bg-neutral-800/50">
+              <FolderPlus size={36} className="text-neutral-500" />
+              <div>
+                <p className="text-gray-400">No buckets found. Create a new bucket to get started.</p>
+                <Button
+                  onClick={() => setIsCreateDialogOpen(true)}
+                  variant="outline"
+                  className="mt-4 border-neutral-700 hover:bg-neutral-800"
+                >
+                  <Plus className="mr-2 h-4 w-4" /> Create Bucket
+                </Button>
+              </div>
             </div>
-          ))
-        ) : (
-          <div className="col-span-full text-center py-10 text-gray-400">
-            No buckets found. Create a new bucket to get started.
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="text-white border-neutral-700">
+        <DialogContent className="text-white border-neutral-700 bg-neutral-900">
           <DialogHeader>
             <DialogTitle>Create New Bucket</DialogTitle>
           </DialogHeader>
-          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          {error && <div className="text-red-500 text-sm mt-2 p-2 rounded bg-red-950/50">{error}</div>}
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
@@ -117,8 +133,19 @@ export default function BucketsContent() {
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={handleCreateBucket} disabled={isCreating} className="bg-white text-black hover:bg-white/80 duration-200">
-              {isCreating ? "Creating..." : "Create"}
+            <Button
+              onClick={handleCreateBucket}
+              disabled={isCreating}
+              className="bg-white text-black hover:bg-white/80"
+            >
+              {isCreating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

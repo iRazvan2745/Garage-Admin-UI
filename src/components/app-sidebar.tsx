@@ -63,10 +63,10 @@ export function AppSidebar() {
   const user = session?.user;
   const router = useRouter();
 
-  let avatarContent = "GA";
-  let displayName = "Garage Admin";
-  let email = "admin@example.com";
-  let avatarImage = undefined;
+  let avatarContent = "";
+  let displayName = "";
+  let email = "";
+  let avatarImage = "";
 
   if (user) {
     displayName = user.name || user.email;
@@ -117,7 +117,10 @@ export function AppSidebar() {
           <div className="flex items-center gap-3">
            <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="focus:outline-none">
+        <button
+          className="focus:outline-none flex items-center gap-3 rounded-md px-2 py-1 transition-colors group"
+          aria-label="Open user menu"
+        >
           <Avatar className="h-8 w-8">
             {avatarImage ? (
               <AvatarImage src={avatarImage} alt={displayName} />
@@ -125,6 +128,10 @@ export function AppSidebar() {
               <AvatarFallback>{avatarContent}</AvatarFallback>
             )}
           </Avatar>
+          <div className="flex flex-col text-left">
+            <span className="text-sm font-semibold leading-tight">{displayName}</span>
+            <span className="text-xs text-muted-foreground truncate leading-tight">{email}</span>
+          </div>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
@@ -147,7 +154,7 @@ export function AppSidebar() {
           </div>
         ) : (
           <button
-            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
+            className="w-full mt-2 bg-amber-500 hover:bg-amber-500 text-white font-bold py-2 px-4 rounded transition-colors"
             onClick={() => router.push("/login")}
           >
             Sign In
@@ -168,16 +175,15 @@ export function AppSidebar() {
                 <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0 pt-14">
+            <SheetContent side="left" className="w-64 p-0 pt-14 h-full flex flex-col">
               <SidebarContent />
             </SheetContent>
           </Sheet>
-          
         </div>
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block fixed left-0 top-0 z-40 border-r bg-neutral-950/70 min-h-screen w-64">
+      <div className="hidden md:block fixed left-0 top-0 z-40 border-r bg-neutral-950/70 h-screen w-64">
         <SidebarContent />
       </div>
       

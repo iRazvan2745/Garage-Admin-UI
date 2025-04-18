@@ -7,7 +7,7 @@ const queryClient = new QueryClient()
 
 export default function Buckets() {
   return (
-    <div className="h-full w-full bg-neutral-900">
+    <div className="h-full w-full">
       <QueryClientProvider client={queryClient}>
         <BucketsContent />
       </QueryClientProvider>

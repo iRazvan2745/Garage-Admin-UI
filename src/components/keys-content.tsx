@@ -90,60 +90,68 @@ export default function KeysContent() {
   }
 
   return (
-    <div className="container py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Access Keys</h1>
-        <Button onClick={() => setOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> New Key
-        </Button>
+    <>
+      <div className="container mx-auto py-6 min-h-screen">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-white">Access Keys</h1>
+          <Button onClick={() => setOpen(true)} className="bg-amber-500 hover:bg-amber-600 text-white font-semibold">
+            <Plus className="mr-2 h-4 w-4" /> New Key
+          </Button>
+        </div>
+        {keys && keys.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {keys.map((key) => (
+              <Link href={`/dashboard/keys/${key.id}`} key={key.id} className="block">
+                <Card className="h-full bg-neutral-950/60 border-neutral-800/70 hover:bg-neutral-900/70 transition-colors shadow-md group">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg flex items-center gap-2 text-white group-hover:text-amber-400 transition-colors">
+                      <Key className="h-5 w-5" />
+                      {key.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-xs text-muted-foreground truncate">ID: {key.id}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 px-2 border border-dashed border-neutral-800 rounded-lg bg-neutral-900/70 mt-12">
+            <Key className="h-10 w-10 mb-4 text-neutral-700" />
+            <p className="text-gray-400 mb-3">No access keys found. Create your first key to get started.</p>
+            <Button onClick={() => setOpen(true)} className="bg-amber-500 hover:bg-amber-600 text-white font-semibold">
+              <Plus className="mr-2 h-4 w-4" /> Create Key
+            </Button>
+          </div>
+        )}
       </div>
 
-      {keys && keys.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 ml-2 mr-2">
-          {keys.map((key) => (
-            <Link href={`/dashboard/keys/${key.id}`} key={key.id} className="block">
-              <Card className="h-full hover:bg-neutral-950/60 transition-colors">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Key className="h-5 w-5" />
-                    {key.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground truncate">ID: {key.id}</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <Card className="text-center py-8">
-          <CardContent>
-            <p className="text-muted-foreground">No access keys found. Create your first key to get started.</p>
-          </CardContent>
-        </Card>
-      )}
-
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="border-neutral-800 max-w-sm w-full rounded-xl">
           <DialogHeader>
-            <DialogTitle>Create New Access Key</DialogTitle>
+            <DialogTitle className="text-white">Create New Access Key</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="name">Key Name</Label>
+              <Label htmlFor="name" className="text-white">Key Name</Label>
               <Input
                 id="name"
                 placeholder="Enter key name"
                 value={newKeyName}
                 onChange={(e) => setNewKeyName(e.target.value)}
+                className="bg-neutral-900 border-neutral-800 text-white"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={createKey} disabled={isCreating}>
-              {isCreating ? "Creating..." : "Create Key"}
+            <Button variant="outline" onClick={() => setOpen(false)} className="border-neutral-700 text-white">Cancel</Button>
+            <Button onClick={createKey} disabled={isCreating} className="bg-amber-500 hover:bg-amber-600 text-white font-semibold">
+              {isCreating ? (
+                <span>Creating...</span>
+              ) : (
+                "Create Key"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -154,7 +162,7 @@ export default function KeysContent() {
         setCredentialsDialogOpen(open);
         if (!open) setCredentials(null);
       }}>
-        <DialogContent className="max-w-[420px] w-full rounded-xl border border-neutral-800 shadow-md p-0">
+        <DialogContent className="max-w-[420px] w-full rounded-xl border border-neutral-800 shadow-md bg-neutral-950 p-0">
           <div className="flex items-center gap-2 px-6 pt-6 pb-2">
             <AlertCircle className="w-5 h-5 text-yellow-500" />
             <span className="text-base font-semibold text-white">Access Key Created</span>
@@ -164,18 +172,18 @@ export default function KeysContent() {
               Please <span className="font-semibold">copy your credentials now</span>. The secret key will <span className="underline">not</span> be shown again!
             </p>
             {credentials && (
-              <div className="bg-neutral-950 border border-neutral-800 rounded-lg px-5 py-3 mt-2 mb-2">
+              <div className="bg-neutral-900 border border-neutral-800 rounded-lg px-5 py-3 mt-2 mb-2">
                 <div className="grid gap-2">
                   {/* Access Key ID Row */}
                   <div className="flex items-center gap-1">
                     <span className="min-w-[140px] text-right font-medium text-xs text-white">Access Key ID:</span>
-                    <span className="font-sans bg-neutral-900 border border-neutral-800 rounded px-2 py-1 text-xs select-all break-all flex-1">
+                    <span className="font-sans bg-neutral-950 border border-neutral-800 rounded px-2 py-1 text-xs select-all break-all flex-1">
                       {credentials.accessKeyId}
                     </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="px-2 ml-1 font-medium text-xs h-7 cursor-pointer"
+                      className="px-2 ml-1 font-medium text-xs h-7 cursor-pointer border-neutral-700 text-white"
                       onClick={() => navigator.clipboard.writeText(credentials.accessKeyId).then(() => toast.success("Access Key ID copied to clipboard"))}
                       title="Copy Access Key ID"
                     >
@@ -185,13 +193,13 @@ export default function KeysContent() {
                   {/* Secret Access Key Row */}
                   <div className="flex items-start gap-1">
                     <span className="min-w-[140px] text-right font-medium text-xs text-white pt-1">Secret Access Key:</span>
-                    <span className="font-mono bg-neutral-900 border border-neutral-800 rounded px-2 py-1 text-xs select-all break-all flex-1">
+                    <span className="font-mono bg-neutral-950 border border-neutral-800 rounded px-2 py-1 text-xs select-all break-all flex-1">
                       {credentials.secretAccessKey}
                     </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="px-2 ml-1 font-medium text-xs h-7 mt-1"
+                      className="px-2 ml-1 font-medium text-xs h-7 mt-1 border-neutral-700 text-white"
                       onClick={() => navigator.clipboard.writeText(credentials.secretAccessKey).then(() => toast.success("Secret Access Key copied to clipboard"))}
                       title="Copy Secret Access Key"
                     >
@@ -206,12 +214,12 @@ export default function KeysContent() {
             <Button onClick={() => {
               setCredentialsDialogOpen(false);
               setCredentials(null);
-            }} className="w-24">
+            }} className="w-24 bg-amber-500 hover:bg-amber-600 text-white font-semibold">
               Close
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   )
 }
