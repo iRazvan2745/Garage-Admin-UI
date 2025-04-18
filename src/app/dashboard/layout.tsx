@@ -8,18 +8,18 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
-        <AppSidebar />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="flex-1 ml-64">
-            {children}
-          </main>
-        </ThemeProvider>
+            <div className="flex min-h-screen w-full">
+              <AppSidebar />
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <main className="flex-1 transition-[margin] duration-300 md:ml-64 mt-16 md:mt-0">
+                  {children}
+                </main>
+              </ThemeProvider>
       </div>
     </SidebarProvider>
   );
