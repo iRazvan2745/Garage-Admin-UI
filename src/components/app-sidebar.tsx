@@ -5,11 +5,18 @@ import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react"; // Add this import
+import { authClient } from "@/lib/auth-client";
 
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+
 import { cn } from "@/lib/utils"; 
 import Logo from "./logo"; 
 import { usePathname } from "next/navigation";
@@ -105,12 +112,38 @@ export function AppSidebar() {
       </div>
 
       {/* Sidebar Footer */}
-      <div className="border-t p-4 mt-0">
+      <div className="border-t  mt-auto p-4 ">
         {user ? (
           <div className="flex items-center gap-3">
-            <DropdownMenu>
-              {/* ...existing dropdown menu content... */}
-            </DropdownMenu>
+           <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="focus:outline-none">
+          <Avatar className="h-8 w-8">
+            {avatarImage ? (
+              <AvatarImage src={avatarImage} alt={displayName} />
+            ) : (
+              <AvatarFallback>{avatarContent}</AvatarFallback>
+            )}
+          </Avatar>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold">{displayName}</span>
+            <span className="text-xs text-muted-foreground truncate">{email}</span>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="text-destructive focus:bg-destructive/10 cursor-pointer"
+          onClick={() => authClient.signOut()}
+        >
+          Logout
+        </DropdownMenuItem>
+        {/* Add more menu items here if needed */}
+      </DropdownMenuContent>
+    </DropdownMenu>
           </div>
         ) : (
           <button
