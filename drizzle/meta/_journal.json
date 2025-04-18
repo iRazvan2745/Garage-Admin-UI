@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1744913711669,
+      "tag": "0000_fresh_raza",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1744913746010,
+      "tag": "0001_thankful_namorita",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1744913864455,
+      "tag": "0002_loving_anita_blake",
+      "breakpoints": true
+    }
+  ]
+}

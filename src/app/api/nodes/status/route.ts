@@ -1,16 +1,5 @@
 import { makeRequest } from "@/lib/makeRequest"
 
-type NodeStatus = {
-  id: string
-  hostname: string
-  addr: string
-  isUp: boolean
-  dataPartition: { total: number; available: number }
-  metadataPartition: { total: number; available: number }
-  lastSeenSecsAgo: number | null
-  role: { zone: string; tags: string[] }
-  partitionCount: number
-}
 
 /*
 async function getUsableStorage(nodes: NodeStatus[]) {

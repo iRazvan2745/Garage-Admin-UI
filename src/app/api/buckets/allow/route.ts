@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     // Only send the flags that are true
     const filteredPermissions = Object.fromEntries(
-      Object.entries(permissions).filter(([_, v]) => v === true)
+      Object.entries(permissions).filter(([, v]) => v === true)
     );
 
     const payload = {
@@ -24,12 +24,21 @@ export async function POST(req: Request) {
     });
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     });
-  } catch (err: any) {
-    if (err?.message?.includes('not found')) {
-      return new Response(JSON.stringify({ error: 'Bucket not found' }), { status: 404 });
+  } catch (err: unknown) {
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'message' in err &&
+      typeof (err as { message: string }).message === 'string'
+    ) {
+      const message = (err as { message: string }).message;
+      if (message.includes('not found')) {
+        return new Response(JSON.stringify({ error: 'Bucket not found' }), { status: 404 });
+      }
+      return new Response(JSON.stringify({ error: message }), { status: 500 });
     }
-    return new Response(JSON.stringify({ error: err?.message || 'Internal server error' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }

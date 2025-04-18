@@ -34,12 +34,22 @@ export async function POST(request: Request) {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API error:", error);
+        let message = "Failed to create bucket";
+        if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as { message: string }).message === 'string') {
+            message = (error as { message: string }).message;
+        }
+        let statusCode = 400;
+        if (typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: string }).code === 'string') {
+            if ((error as { code: string }).code === 'AccessDenied') {
+                statusCode = 403;
+            }
+        }
         return new Response(JSON.stringify({ 
-            error: error.message || "Failed to create bucket" 
+            error: message 
         }), {
-            status: error.code === 'AccessDenied' ? 403 : 400,
+            status: statusCode,
             headers: { 'Content-Type': 'application/json' }
         });
     }

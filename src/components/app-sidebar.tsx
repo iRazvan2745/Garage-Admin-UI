@@ -4,6 +4,15 @@ import { Home, Key, PaintBucket, Server } from "lucide-react";
 import Link from "next/link"; 
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils"; 
 import Logo from "./Logo"; 
 import { usePathname } from "next/navigation";
@@ -41,9 +50,30 @@ function SidebarNavItem({
   );
 }
 
-export function AppSidebar() {
+import { useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
+export function AppSidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const router = useRouter();
+
+  let avatarContent = "GA";
+  let displayName = "Garage Admin";
+  let email = "admin@example.com";
+  let avatarImage = undefined;
+
+  if (user) {
+    displayName = user.name || user.email;
+    email = user.email;
+    avatarContent = user.name
+      ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase()
+      : user.email[0].toUpperCase();
+    if (user.image) {
+      avatarImage = user.image;
+    }
+  }
 
   return (
     <div className="hidden md:block fixed left-0 top-0 z-40 border-r bg-neutral-950/70 min-h-screen w-64">
@@ -52,7 +82,7 @@ export function AppSidebar() {
         <div className="flex h-14 mt-6 items-center px-4 lg:h-[60px] lg:px-6">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 font-semibold" // Ensure text uses foreground color
+            className="flex items-center gap-2 font-semibold"
           >
             <Logo />
           </Link>
@@ -80,24 +110,51 @@ export function AppSidebar() {
 
         {/* Sidebar Footer */}
         <div className="border-t p-4 mt-0">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8">
-              {/* Add AvatarImage if you have a user image URL */}
-              {/* <AvatarImage src="/path/to/user-avatar.png" alt="User Name" /> */}
-              <AvatarFallback>GA</AvatarFallback> {/* Initials */}
-            </Avatar>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium leading-none text-foreground">
-                Garage Admin
-              </span>
-              <span className="text-xs text-muted-foreground">
-                admin@example.com
-              </span>
-            </div>
+          {user ? (
+  <div className="flex items-center gap-3">
+    
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="focus:outline-none">
+          <Avatar className="h-8 w-8">
+            {avatarImage ? (
+              <AvatarImage src={avatarImage} alt={displayName} />
+            ) : (
+              <AvatarFallback>{avatarContent}</AvatarFallback>
+            )}
+          </Avatar>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold">{displayName}</span>
+            <span className="text-xs text-muted-foreground truncate">{email}</span>
           </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="text-destructive focus:bg-destructive/10 cursor-pointer"
+          onClick={() => authClient.signOut()}
+        >
+          Logout
+        </DropdownMenuItem>
+        {/* Add more menu items here if needed */}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </div>
+) : (
+  <button
+    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
+    onClick={() => router.push("/login")}
+  >
+    Sign In
+  </button>
+)}
           {/* You could add Settings/Logout links here */}
         </div>
       </div>
     </div>
   );
 }
+

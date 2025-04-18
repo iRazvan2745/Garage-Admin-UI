@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   }
   
   const statusResponse = await makeRequest('status');
-  const node = statusResponse.nodes.find((node: any) => node.id === id);
+  const node = statusResponse.nodes.find((node: { id: string }) => node.id === id);
   
   if (!node) {
     return new Response(JSON.stringify({ error: "Node not found" }), {

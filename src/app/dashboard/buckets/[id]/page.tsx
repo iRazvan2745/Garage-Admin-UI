@@ -33,7 +33,7 @@ type BucketData = {
   globalAliases?: string[]
   description?: string
   websiteAccess: boolean
-  websiteConfig: any
+  websiteConfig: boolean
   keys: BucketKey[]
   objects: number
   bytes: number
@@ -212,7 +212,7 @@ function BucketViewerContent({ params }: { params: Promise<Params> | Params }) {
                     Add Key to Bucket
                   </Button>
                   <AddKeyToBucketDialog
-                    bucketId={bucket.id}
+                    bucketId={id}
                     accessKeyId={addKeyAccessKeyId}
                     open={addKeyDialogOpen}
                     onOpenChange={open => {

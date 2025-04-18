@@ -1,5 +1,4 @@
-import { betterFetch, createFetch } from '@better-fetch/fetch';
-import { z } from 'zod';
+import { betterFetch } from '@better-fetch/fetch';
 
 /**
  * Makes a request to the API with the given endpoint and options.

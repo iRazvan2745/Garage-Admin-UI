@@ -200,17 +200,6 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Used: {formatBytes(usedStorage)}</span>
-                    <span>Total: {formatBytes(totalStorage)}</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2.5">
-                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${storagePercentage}%` }}></div>
-                  </div>
-                  <div className="text-xs text-muted-foreground">{storagePercentage}% of storage used</div>
-                </div>
-
                 <div className="space-y-4">
                   {data?.nodes?.map((node) => (
                     <div key={node.id} className="border rounded-lg p-4 bg-neutral-950 border-neutral-800">
@@ -227,7 +216,7 @@ function DashboardContent() {
                               {node.isUp ? "Online" : "Offline"}
                             </div>
                           </div>
-                          <p className="text-sm text-neutral-400 mt-1">ID: {node.id.substring(0, 8)}...</p>
+                          <p className="text-sm text-neutral-400 mt-1">ID: {node.id}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-800 text-neutral-200">
@@ -401,10 +390,14 @@ function DashboardContent() {
     </div>      )
     }
 
+import { ProtectedPage } from "@/components/protected-page";
+
 export default function Dashboard() {
-      return (
-        <QueryClientProvider client={queryClient}>
-          <DashboardContent />
-        </QueryClientProvider>
-      )
-    }
+  return (
+    <ProtectedPage>
+      <QueryClientProvider client={queryClient}>
+        <DashboardContent />
+      </QueryClientProvider>
+    </ProtectedPage>
+  );
+}

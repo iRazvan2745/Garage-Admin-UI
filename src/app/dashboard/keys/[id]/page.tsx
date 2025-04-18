@@ -22,12 +22,6 @@ type KeyPermission = {
   owner: boolean
 }
 
-type BucketKey = {
-  accessKeyId: string
-  name: string
-  permissions: KeyPermission
-  bucketLocalAliases: string[]
-}
 
 type KeyData = {
   name: string

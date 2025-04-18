@@ -8,10 +8,14 @@ export async function GET() {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to fetch nodes:", error);
+        let message = "Failed to fetch nodes";
+        if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as { message: string }).message === 'string') {
+            message = (error as { message: string }).message;
+        }
         return new Response(JSON.stringify({ 
-            error: error.message || "Failed to fetch nodes" 
+            error: message 
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }

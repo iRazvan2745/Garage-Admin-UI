@@ -9,7 +9,7 @@ export interface BucketInfo {
   id: string;
   globalAliases: string[];
   websiteAccess: boolean;
-  websiteConfig: null | any;
+  websiteConfig: boolean;
   keys: string[];
   objects: number;
   bytes: number;
@@ -44,8 +44,14 @@ export interface Node {
   hostname: string
   isUp: boolean
   lastSeenSecondsAgo: number
-  dataPartition: string[]
-  metadataPartition: string[]
+  dataPartition: { 
+    total: number; 
+    available: number 
+  }
+  metadataPartition: {
+    total: number; 
+    available: number 
+  }
 }
 
 export interface NodeList {

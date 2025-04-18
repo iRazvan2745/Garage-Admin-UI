@@ -18,24 +18,33 @@ export async function DELETE(request: Request) {
         
         return new Response(JSON.stringify({ success: true, message: `Bucket ${id} deleted successfully` }), { status: 200 });
         
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("API error:", error);
-        
-        if (error.message?.includes("not empty")) {
+        let message = "";
+        let code = "";
+        if (typeof error === 'object' && error !== null) {
+            if ('message' in error && typeof (error as { message: string }).message === 'string') {
+                message = (error as { message: string }).message;
+            }
+            if ('code' in error && typeof (error as { code: string }).code === 'string') {
+                code = (error as { code: string }).code;
+            }
+        }
+        if (message.includes("not empty")) {
             return new Response(JSON.stringify({ 
                 error: "Bucket is not empty" 
             }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
-        } else if (error.code === "NoSuchBucket") {
+        } else if (code === "NoSuchBucket") {
             return new Response(JSON.stringify({ 
                 error: "Bucket not found" 
             }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' }
             });
-        } else if (error.message?.includes("Method Not Allowed")) {
+        } else if (code === "MethodNotAllowed") {
             return new Response(JSON.stringify({ 
                 error: "Invalid request method - contact administrator" 
             }), {
@@ -45,7 +54,7 @@ export async function DELETE(request: Request) {
         }
         
         return new Response(JSON.stringify({ 
-            error: error.message || "Failed to delete bucket" 
+            error: message || "Failed to delete bucket" 
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
