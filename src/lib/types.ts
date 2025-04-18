@@ -39,19 +39,20 @@ export interface NodeRole {
 
 export interface Node {
   id: string;
-  role: NodeRole[];
+  role: NodeRole;
   addr: string;
-  hostname: string
-  isUp: boolean
-  lastSeenSecondsAgo: number
-  dataPartition: { 
-    total: number; 
-    available: number 
-  }
+  hostname: string;
+  isUp: boolean;
+  lastSeenSecsAgo: number | null;
+  draining: boolean;
+  dataPartition: {
+    total: number;
+    available: number;
+  };
   metadataPartition: {
-    total: number; 
-    available: number 
-  }
+    total: number;
+    available: number;
+  };
 }
 
 export interface NodeList {

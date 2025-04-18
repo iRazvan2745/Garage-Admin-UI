@@ -15,12 +15,13 @@ import { Label } from "@/components/ui/label"
 import { formatBytes } from "@/lib/utils"
 import { toast } from "sonner"
 import Link from "next/link"
+import type { NodeList } from "@/lib/types"
 
 export default function NodesContent() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [newNodeConnectID, setNewNodeConnectID] = useState("")
   
-  const { data: nodes, isLoading, error } = useQuery({
+  const { data: nodes, isLoading, error } = useQuery<NodeList>({
     queryKey: ['nodes'],
     queryFn: async () => {
       const response = await fetch("/api/nodes/list")
@@ -123,9 +124,9 @@ export default function NodesContent() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      {nodes && nodes.length > 0 ? (
+      {nodes && nodes.nodes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {nodes.map((node: Node) => (
+          {nodes.nodes.map((node: Node) => (
             <Link key={node.id} href={`/dashboard/nodes/${node.id}`}>
               <Card className="overflow-hidden px-4 py-6 hover:bg-neutral-950/60 cursor-pointer duration-300">
                 <CardHeader className="pb-2">
@@ -151,10 +152,10 @@ export default function NodesContent() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Zone: {node?.role?.[0]?.zone ?? "N/A"}</span>
+                    <span className="text-muted-foreground">Zone: {node?.role?.zone ?? "N/A"}</span>
                     <span className="text-muted-foreground">
-                      {node.lastSeenSecondsAgo !== null 
-                        ? `Last seen ${node.lastSeenSecondsAgo}s ago` 
+                      {node.lastSeenSecsAgo !== null 
+                        ? `Last seen ${node.lastSeenSecsAgo}s ago` 
                         : "Status unknown"}
                     </span>
                   </div>
