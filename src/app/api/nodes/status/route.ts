@@ -1,26 +1,21 @@
 import { makeRequest } from "@/lib/makeRequest"
+import { withApiAuth } from "@/lib/withApiAuth";
 
 
-/*
-async function getUsableStorage(nodes: NodeStatus[]) {
-  const totalStorage = nodes.reduce((acc, node) => acc + node.dataPartition.total, 0);
-  const availableStorage = nodes.reduce((acc, node) => acc + node.dataPartition.available, 0);
-  // Calculate per-partition free space per node
-  const perPartitionFree = nodes
-    .filter(node => node.partitionCount > 0)
-    .map(node => node.dataPartition.available / node.partitionCount);
-  const minPerPartitionFree = perPartitionFree.length > 0 ? Math.min(...perPartitionFree) : 0;
-  const usableStorage = minPerPartitionFree * 256;
-  return { totalStorage, availableStorage, usableStorage };
-}
-*/
-
-export async function GET() {
-  const response = await makeRequest('status') as Record<string, unknown>;
-  return new Response(JSON.stringify({
-    ...response,
-  }), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' }
-  });
+export async function GET(request: Request) {
+  try {
+    await withApiAuth(request);
+    const response = await makeRequest('status') as Record<string, unknown>;
+    return new Response(JSON.stringify({
+      ...response,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Unauthorized') {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    }
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  }
 }

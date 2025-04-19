@@ -1,6 +1,10 @@
 import { makeDeleteRequest } from "@/lib/makeRequest";
 
+import { withApiAuth } from "@/lib/withApiAuth";
+
 export async function DELETE(request: Request) {
+    const authResult = await withApiAuth(request);
+    if (authResult instanceof Response) return authResult;
     try {
         const url = new URL(request.url);
         const id = url.searchParams.get('id');

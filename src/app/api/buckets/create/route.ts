@@ -1,7 +1,11 @@
 import { makePostRequest, makePutRequest } from "@/lib/makeRequest";
 import type { BucketInfo as BucketData } from "@/lib/types";
 
+import { withApiAuth } from "@/lib/withApiAuth";
+
 export async function POST(request: Request): Promise<Response> {
+    const authResult = await withApiAuth(request);
+    if (authResult instanceof Response) return authResult;
     const url = new URL(request.url);
     const name = url.searchParams.get('name');
     console.log("Bucket name parameter:", name);

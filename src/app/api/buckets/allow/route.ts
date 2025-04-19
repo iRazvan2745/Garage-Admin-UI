@@ -1,6 +1,10 @@
 import { makeRequest } from '@/lib/makeRequest';
 
+import { withApiAuth } from "@/lib/withApiAuth";
+
 export async function POST(req: Request) {
+  const authResult = await withApiAuth(req);
+  if (authResult instanceof Response) return authResult;
   try {
     const body = await req.json();
     const { bucketId, accessKeyId, permissions } = body;

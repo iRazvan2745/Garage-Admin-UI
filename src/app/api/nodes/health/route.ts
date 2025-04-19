@@ -1,6 +1,10 @@
 import { makeRequest } from "@/lib/makeRequest";
 
-export async function GET() {
+import { withApiAuth } from "@/lib/withApiAuth";
+
+export async function GET(request: Request) {
+    const authResult = await withApiAuth(request);
+    if (authResult instanceof Response) return authResult;
     try {
         const response = await makeRequest("health");
         

@@ -4,7 +4,11 @@ import type { NodeList } from "@/lib/types";
 
 
 
+import { withApiAuth } from "@/lib/withApiAuth";
+
 export async function GET(request: NextRequest) {
+  const authResult = await withApiAuth(request);
+  if (authResult instanceof Response) return authResult;
   const searchParams = request.nextUrl.searchParams;
   const id = searchParams.get('id');
 

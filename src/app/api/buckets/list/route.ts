@@ -1,7 +1,11 @@
 import { makeRequest } from "@/lib/makeRequest";
 
 
-export async function GET() {
+import { withApiAuth } from "@/lib/withApiAuth";
+
+export async function GET(request: Request) {
+  const authResult = await withApiAuth(request);
+  if (authResult instanceof Response) return authResult;
   const response = await makeRequest('bucket?list');
   return new Response(JSON.stringify(response), {
       status: 200,
