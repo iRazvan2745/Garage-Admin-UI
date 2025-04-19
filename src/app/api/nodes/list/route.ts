@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const authResult2 = await withApiAuth(request);
   if (authResult2 instanceof Response) return authResult2;
   try {
-    const response = await makeRequest('node?list');
+    const response = await makeRequest('status');
     return new Response(JSON.stringify(response), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
