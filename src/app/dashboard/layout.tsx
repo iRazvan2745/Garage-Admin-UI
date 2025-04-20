@@ -1,26 +1,25 @@
-import "../globals.css";
+import type React from "react"
+import "../globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <SidebarProvider>
-      <div className="flex h-screen w-screen overflow-hidden">
-        <AppSidebar />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="flex-1 overflow-auto transition-[margin] duration-300 md:ml-64 mt-16 md:mt-0">
-            {children}
-          </main>
+    <html lang="en" suppressHydrationWarning>
+      <body className="">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <SidebarProvider>
+            <div className="flex h-screen">
+              <AppSidebar />
+              <SidebarInset className="flex-1 overflow-auto">
+                <main className="p-4">{children}</main>
+              </SidebarInset>
+            </div>
+          </SidebarProvider>
         </ThemeProvider>
-      </div>
-    </SidebarProvider>
-  );
+      </body>
+    </html>
+  )
 }
