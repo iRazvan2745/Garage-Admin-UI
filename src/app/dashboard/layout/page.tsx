@@ -125,7 +125,7 @@ function LayoutContent() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-[calc(100vh-8rem)]">
         <Alert variant="destructive" className="max-w-lg">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -146,7 +146,9 @@ function LayoutContent() {
   const modifiedRoleIds = modifiedRoles.map((role) => role.id)
 
   return (
-    <div className="ml-8 mb-8 h-full flex flex-col">
+    // NOTE: Removed the ml-8 mb-8 h-full flex flex-col
+    // This allows the component to follow the normal document flow
+    <div className="mb-8">
       {/* Header */}
       <div className="flex items-center justify-between py-3 mb-4">
         <div>
@@ -169,15 +171,15 @@ function LayoutContent() {
         </Button>
       </div>
 
-      {/* Main content */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 h-[calc(100%-4rem)]">
+      {/* Main content - fixed height container */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" style={{ height: "calc(100vh - 10rem)" }}>
         {/* Current Roles Column */}
-        <Card className="h-full flex flex-col overflow-hidden">
+        <Card className="flex flex-col overflow-hidden">
           <CardHeader className="p-3 border-b">
             <CardTitle className="text-base font-medium">Current Roles ({data?.roles.length || 0})</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 p-0">
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-[calc(100vh-12rem)]">
               {isLoading ? (
                 <div className="p-4">
                   <LoadingSkeleton />
@@ -194,14 +196,14 @@ function LayoutContent() {
         </Card>
 
         {/* Staged Changes Column */}
-        <Card className="h-full flex flex-col overflow-hidden">
+        <Card className="flex flex-col overflow-hidden">
           <CardHeader className="p-3 border-b">
             <CardTitle className="text-base font-medium">
               Staged Changes ({data?.stagedRoleChanges.length || 0})
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 p-0">
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-[calc(100vh-12rem)]">
               {isLoading ? (
                 <div className="p-4">
                   <LoadingSkeleton />
@@ -215,7 +217,7 @@ function LayoutContent() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center h-full py-12 text-muted-foreground">
+                    <div className="flex items-center justify-center py-12 text-muted-foreground">
                       No staged changes
                     </div>
                   )}
