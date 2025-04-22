@@ -26,7 +26,7 @@ export function formatBits(bits: number, decimals = 2): string {
 
   const k = 1000
   const dm = decimals < 0 ? 0 : decimals
-  const sizes = ["Bits", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+  const sizes = ["Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
 
   const i = Math.floor(Math.log(bits) / Math.log(k))
 

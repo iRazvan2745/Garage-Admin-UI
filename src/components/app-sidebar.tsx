@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Key, PaintBucket, Server } from "lucide-react"
+import { Home, Key, Palette, Menu, PaintBucket, Server } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession } from "@/lib/auth-client"
@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/sidebar"
 import Logo from "./logo"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
 
 const navigationItems = [
   {
@@ -35,6 +34,7 @@ const navigationItems = [
     items: [
       { title: "Home", url: "/dashboard", icon: Home },
       { title: "Nodes", url: "/dashboard/nodes", icon: Server },
+      { title: "Layout", url: "/dashboard/layout", icon: Palette }
     ],
   },
   {
