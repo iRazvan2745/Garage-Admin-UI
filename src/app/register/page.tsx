@@ -45,7 +45,12 @@ export default function RegisterPage() {
     setLoading(true);
     setFormError(null);
     try {
-      await signUp.email({ email, password, name });
+      // Use the correct signUp method from better-auth
+      await signUp.email({
+        email,
+        password,
+        name
+      });
       router.replace("/login");
     } catch (err: unknown) {
       // If the server blocks registration, show a clear message

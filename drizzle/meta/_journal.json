@@ -1,33 +1,19 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1744913711669,
-      "tag": "0000_fresh_raza",
+      "version": "7",
+      "when": 1746223326703,
+      "tag": "0000_natural_layla_miller",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "6",
-      "when": 1744913746010,
-      "tag": "0001_thankful_namorita",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1744913864455,
-      "tag": "0002_loving_anita_blake",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1745033229940,
-      "tag": "0003_flawless_xavin",
+      "version": "7",
+      "when": 1746225135173,
+      "tag": "0001_stiff_wild_pack",
       "breakpoints": true
     }
   ]

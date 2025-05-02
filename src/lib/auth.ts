@@ -8,7 +8,7 @@ import { adminClient } from "better-auth/client/plugins"
 export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: "pg",
     schema, // <-- pass schema here
   }),
   plugins: [
